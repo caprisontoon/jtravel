@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "JTravel",
+    "slug": "jtravel",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "jtravel",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0B7285"
+    },
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
