@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { ExtractionOutput } from './schema.js';
 import type { VideoData } from './youtube.js';
+import { geocodePlaces } from './geocode.js';
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
 
@@ -60,7 +61,10 @@ export async function extractItinerary(
     throw new Error('AI가 일정을 추출하지 못했어요. 다시 시도해 주세요.');
   }
 
-  return assembleResult(url, video, parsed);
+  const result = assembleResult(url, video, parsed);
+  // Fill real coordinates + accurate distances via free geocoding.
+  await geocodePlaces(result);
+  return result;
 }
 
 /** Maps the model's flat output into the app's full ExtractionResult shape. */

@@ -69,5 +69,9 @@ npm run dev
 ## 작동 방식 (참고)
 - `src/youtube.ts` — 자막(youtube-transcript) + 제목(oEmbed) 가져오기, 둘 다 열쇠 불필요
 - `src/extract.ts` — Claude(`claude-opus-4-8`)로 구조화 추출 (Structured Outputs로 형식 보장)
+- `src/geocode.ts` — 무료 지도(OpenStreetMap)로 진짜 좌표 채우기 + 거리 계산, **열쇠 불필요**
 - `src/schema.ts` — AI가 채워야 할 데이터 형식 (docs/MVP_DESIGN.md §3 기반)
 - `src/index.ts` — `POST /analyze` 엔드포인트
+
+> ⏱️ 좌표 조회는 지도 서버 정책상 장소당 약 1초씩 걸려요. 장소가 많은 영상은
+> 분석이 조금 더 오래 걸릴 수 있어요(정상).
