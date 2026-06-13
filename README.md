@@ -45,9 +45,15 @@ src/
 - ⏳ `extractionService.analyzeVideo` 는 mock — 실제 백엔드(`POST /analyze`)로 교체 예정
 - ⏳ `MapPlaceholder` 는 `react-native-maps` <MapView/Marker/Polyline> 로 교체 예정
 
+## 진짜 AI 분석 켜기 (Phase 1 — 완료 ✅)
+
+`server/` 폴더에 분석 서버가 들어 있습니다. Claude API 열쇠만 있으면 아무 여행
+유튜브 링크나 진짜로 분석됩니다. 설정 방법은 **[server/README.md](server/README.md)** 참고.
+앱 쪽은 `src/config.ts` 의 `API_BASE_URL` 에 서버 주소를 넣으면 mock → 실제로 전환됩니다.
+
 ## 다음 단계
 
-1. 백엔드 추출 파이프라인 (YouTube Data API → 자막/STT → Claude API → 보강)
+1. ~~백엔드 추출 파이프라인 (자막 → Claude API)~~ → `server/` 에 구현됨
 2. Google Maps Platform 연동 (Geocoding/Places/Directions/Distance Matrix)
 3. 예약 제휴 API (Booking/Agoda/OpenTable/TableCheck) 딥링크
 4. 디바이스 로컬 저장 (최근 분석 영상)

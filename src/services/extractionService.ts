@@ -1,5 +1,6 @@
 import { ExtractionResult } from '@/types/extraction';
 import { mockItinerary } from '@/data/mockItinerary';
+import { API_BASE_URL, USE_MOCK } from '@/config';
 
 export type AnalysisStep = 'captions' | 'extract' | 'geocode' | 'route';
 
@@ -31,11 +32,37 @@ export async function analyzeVideo(
   if (!isValidYoutubeUrl(url)) {
     throw new Error('유효한 유튜브 링크가 아니에요.');
   }
-  for (const { key } of ANALYSIS_STEPS) {
-    onStep?.(key);
-    await delay(700);
+
+  // No backend configured → demo on the bundled mock data.
+  if (USE_MOCK) {
+    for (const { key } of ANALYSIS_STEPS) {
+      onStep?.(key);
+      await delay(700);
+    }
+    return { ...mockItinerary, source: { ...mockItinerary.source, url } };
   }
-  return { ...mockItinerary, source: { ...mockItinerary.source, url } };
+
+  // Real analysis via the backend. Step labels are advanced optimistically
+  // for UX; the heavy work happens in the single /analyze request.
+  onStep?.('captions');
+  const res = await fetch(`${API_BASE_URL}/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  }).catch(() => {
+    throw new Error('서버에 연결하지 못했어요. 같은 Wi-Fi인지, 서버가 켜져 있는지 확인하세요.');
+  });
+
+  onStep?.('extract');
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body?.error ?? '분석에 실패했어요.');
+  }
+
+  onStep?.('geocode');
+  const result = (await res.json()) as ExtractionResult;
+  onStep?.('route');
+  return result;
 }
 
 function delay(ms: number): Promise<void> {
