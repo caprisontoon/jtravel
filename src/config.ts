@@ -13,3 +13,5 @@
 export const API_BASE_URL = '';
 
 export const USE_MOCK = API_BASE_URL.trim() === '';
+
+export const API_BASE_URL = 'http://192.168.0.3:8787';
